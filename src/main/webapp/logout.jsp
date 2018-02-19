@@ -14,6 +14,8 @@
    else
    {
        session.invalidate(); 
+       String custsession = "JSESSIONID=" + " " +";Path=/;Secure;HttpOnly;SameSite=Strict";
+       response.setHeader("Set-Cookie", custsession);
        response.sendRedirect("/error.html");
    }
 
