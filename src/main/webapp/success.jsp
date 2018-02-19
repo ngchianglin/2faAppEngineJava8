@@ -10,10 +10,28 @@ AuthSession.validate(request, response);
 response.setHeader("Cache-Control", "no-store");
 
 String userid = (String)session.getAttribute("userid");
+
 if(userid == null)
 {
     response.sendRedirect("/error.html");
 }
+
+//Prevent CSRF by requring OTP validation each time page is displayed. 
+String anticsrf = (String)session.getAttribute("anticsrf_success");
+if(anticsrf == null)
+{//token not present redirect back to OTP page for validation again
+    session.removeAttribute("userid");
+    session.setAttribute("userid2fa", userid);
+    userid = null; 
+    RequestDispatcher rd = request.getRequestDispatcher("otp.jsp");
+    rd.forward(request, response);
+}
+else
+{//token present
+    //remvoe the token so that subsequent request will require OTP validation
+    session.removeAttribute("anticsrf_success");
+}
+
 String username = UserDAO.getUserName(userid, request.getRemoteAddr());
 
 %> 

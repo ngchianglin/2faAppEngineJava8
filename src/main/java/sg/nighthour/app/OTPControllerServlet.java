@@ -105,6 +105,7 @@ public class OTPControllerServlet extends HttpServlet
             session.invalidate();
             session = request.getSession(true);
             session.setAttribute("userid", userid);
+            session.setAttribute("anticsrf_success", "AntiCSRF");
 
             String custsession = "JSESSIONID=" + session.getId() + ";Path=/;Secure;HttpOnly;SameSite=Strict";
             response.setHeader("Set-Cookie", custsession);
