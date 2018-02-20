@@ -48,7 +48,18 @@ public class AuthSession
      * @throws IOException
      * @throws ServletException
      */
-    public static void validate(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException
+    
+    /**
+     * Validate if a session has been authenticated successfully and is still valid
+     * Redirect to login page if session is not authenticated or invalid
+     * 
+     * @param req
+     * @param resp
+     * @return true if session is authenticated successfully, false otherwise
+     * @throws IOException
+     * @throws ServletException
+     */
+    public static boolean validate(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException
     {
         if (req == null || resp == null)
         {
@@ -63,6 +74,7 @@ public class AuthSession
         {
             log.warning("Error: Null Session " + req.getRemoteAddr());
             resp.sendRedirect("/index.jsp");
+            return false;
         }
         
        
@@ -70,10 +82,15 @@ public class AuthSession
         { // not authenticated
             log.warning("Error: Invalid Authentication Session " + req.getRemoteAddr());
             resp.sendRedirect("/index.jsp");
+            return false;
         }
+        
+        return true;
         
     }
     
+    
+   
     
     /**
      * Check if 2fa userid attribute is set. If it is not, redirect to specified error url
@@ -81,11 +98,11 @@ public class AuthSession
      * @param req
      * @param resp
      * @param redirecturl
-     *            error url
+     * @return true if 2fa userid attribute is properly set, false otherwise
      * @throws IOException
      * @throws ServletException
      */
-    public static void check2FASession(HttpServletRequest req, HttpServletResponse resp, String redirecturl)
+    public static boolean check2FASession(HttpServletRequest req, HttpServletResponse resp, String redirecturl)
             throws IOException, ServletException
     {
         if (req == null || resp == null || redirecturl == null)
@@ -100,6 +117,7 @@ public class AuthSession
         {
             log.warning("Error: Null Session " + req.getRemoteAddr());
             resp.sendRedirect(redirecturl);
+            return false;
         }
        
         String userid2fa = (String) session.getAttribute("userid2fa");
@@ -107,7 +125,10 @@ public class AuthSession
         {
             log.warning("Error: 2FA not set " + req.getRemoteAddr() );
             resp.sendRedirect(redirecturl);
+            return false;
         }
+        
+        return true; 
 
     }
 }
