@@ -71,7 +71,10 @@ public class OTPControllerServlet extends HttpServlet
         
         // Make sure it has a valid 2fa session from login page
         // userid2fa session attribute must be set
-        AuthSession.check2FASession(request, response, "/index.jsp");
+        if(!AuthSession.check2FASession(request, response, "/index.jsp"))
+        {
+            return;
+        }
         
         HttpSession session = request.getSession(false);
         String userid = (String) session.getAttribute("userid2fa");
@@ -85,6 +88,7 @@ public class OTPControllerServlet extends HttpServlet
             session.invalidate();
             log.warning("Error: Invalid otp value " + request.getRemoteAddr() + " " + userid);
             response.sendRedirect("/error.html");
+            return;
         }
 
         String otpsecret = OTPDAO.getOTPSecret(userid, request.getRemoteAddr());
@@ -97,6 +101,7 @@ public class OTPControllerServlet extends HttpServlet
             session.invalidate();
             log.warning("Error: cannot generate otp " + request.getRemoteAddr() + " " + userid);
             response.sendRedirect("/error.html");
+            return; 
         }
 
         if (otpresult.equals(otpvalue))
@@ -116,7 +121,8 @@ public class OTPControllerServlet extends HttpServlet
         {// Incorrect OTP value
             
             String remoteip = request.getRemoteAddr();
-
+            log.warning("Error: Invalid otp value " + request.getRemoteAddr() + " " + userid);
+            
             // Update fail login count. If max fail login is exceeded, lock account
             OTPDAO.incrementFailLogin(userid, remoteip);
             
