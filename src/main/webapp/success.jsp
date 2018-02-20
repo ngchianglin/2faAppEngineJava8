@@ -6,14 +6,18 @@
  
 <%
 
-AuthSession.validate(request, response);
 response.setHeader("Cache-Control", "no-store");
+if(!AuthSession.validate(request, response))
+{
+    return;
+}
 
 String userid = (String)session.getAttribute("userid");
 
 if(userid == null)
 {
     response.sendRedirect("/error.html");
+    return;
 }
 
 //Prevent CSRF by requring OTP validation each time page is displayed. 
@@ -25,6 +29,7 @@ if(anticsrf == null)
     userid = null; 
     RequestDispatcher rd = request.getRequestDispatcher("otp.jsp");
     rd.forward(request, response);
+    return; 
 }
 else
 {//token present

@@ -3,9 +3,12 @@
 <%@page import="sg.nighthour.app.AuthSession" %>
 
 <%
-
-AuthSession.check2FASession(request, response, "/index.jsp");
 response.setHeader("Cache-Control", "no-store");
+
+if(!AuthSession.check2FASession(request, response, "/index.jsp"))
+{
+   return;    
+}
 
 %>
 
