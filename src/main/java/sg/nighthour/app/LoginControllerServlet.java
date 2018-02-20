@@ -70,6 +70,7 @@ public class LoginControllerServlet extends HttpServlet
         {//no existing session
             log.warning("Error: Session not present redirect to login.jsp " + request.getRemoteAddr());
             response.sendRedirect("/index.jsp");
+            return;
         }
         
 
@@ -80,6 +81,7 @@ public class LoginControllerServlet extends HttpServlet
         {
             log.warning("Error: Invalid userid or password " + request.getRemoteAddr());
             response.sendRedirect("/index.jsp");
+            return; 
         }
 
         if (LoginDAO.validateUser(userid, password, request.getRemoteAddr()))
