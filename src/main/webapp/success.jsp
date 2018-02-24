@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@page import="sg.nighthour.app.UserDAO" %>
 <%@page import="sg.nighthour.app.AuthSession" %>
-  
+<%@page import="sg.nighthour.app.HtmlEscape" %>
  
 <%
 
@@ -38,6 +38,7 @@ else
 }
 
 String username = UserDAO.getUserName(userid, request.getRemoteAddr());
+username = HtmlEscape.escapeHTML(username);
 
 %> 
     
