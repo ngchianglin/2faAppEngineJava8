@@ -26,7 +26,6 @@ package sg.nighthour.app;
 
 import java.io.IOException;
 import java.util.logging.Logger;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -37,17 +36,6 @@ public class AuthSession
 {
 
     private static final Logger log = Logger.getLogger(AuthSession.class.getName());
-    
-    
-    /**
-     * Validate if a session has been authenticated successfully and is still valid
-     * Redirect to login page if session is not authenticated or invalid
-     * 
-     * @param req
-     * @param resp
-     * @throws IOException
-     * @throws ServletException
-     */
     
     /**
      * Validate if a session has been authenticated successfully and is still valid
@@ -63,7 +51,7 @@ public class AuthSession
     {
         if (req == null || resp == null)
         {
-            log.warning("Error: null arguments " + req.getRemoteAddr() );
+            log.warning("Error: null arguments");
             throw new ServletException("null arguments");
         }
 
@@ -107,7 +95,7 @@ public class AuthSession
     {
         if (req == null || resp == null || redirecturl == null)
         {
-            log.warning("Error: null arguments " + req.getRemoteAddr());
+            log.warning("Error: null arguments");
             throw new ServletException("null arguments");
         }
 
@@ -132,3 +120,4 @@ public class AuthSession
 
     }
 }
+
